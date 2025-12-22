@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --bg-primary: #0f172a;
+    --bg-secondary: rgba(30, 41, 59, 0.7);
+    --text-primary: #ffffff;
+    --text-secondary: #94a3b8;
+    --border-color: rgba(255, 255, 255, 0.05);
+    --sidebar-bg: rgba(15, 23, 42, 0.9);
+    --header-bg: rgba(15, 23, 42, 0.7);
+}
+
+:root.light {
+    --bg-primary: #f8fafc;
+    --bg-secondary: rgba(255, 255, 255, 0.8);
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --border-color: rgba(0, 0, 0, 0.05);
+    --sidebar-bg: #ffffff;
+    --header-bg: rgba(255, 255, 255, 0.8);
+}
+
+.admin-theme-layout {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.admin-theme-layout .bg-white {
+    background: var(--bg-secondary) !important;
+    backdrop-filter: blur(12px) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+.admin-theme-layout aside {
+    background: var(--sidebar-bg) !important;
+    border-right: 1px solid var(--border-color) !important;
+}
+
+.admin-theme-layout header {
+    background: var(--header-bg) !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.admin-theme-layout .text-gray-600 {
+    color: var(--text-secondary) !important;
+}
+
+.admin-theme-layout .text-gray-800 {
+    color: var(--text-primary) !important;
+}
+
+.admin-theme-layout .text-gray-500 {
+    color: var(--text-secondary) !important;
+}
+
+/* Sidebar Active State for Admin */
+.admin-theme-layout .sidebar-link-active {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%) !important;
+    color: white !important;
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.5) !important;
+    font-weight: 700 !important;
+}
+
+.admin-theme-layout .sidebar-link-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.admin-theme-layout .sidebar-link-hover:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: white !important;
+    transform: translateX(5px);
+}
+
+/* Reusing the mesh background in the Layout */
+.admin-layout-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.admin-content-inner {
+    position: relative;
+    z-index: 1;
+}
+
+.dash-blob {
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+    filter: blur(120px);
+    border-radius: 50%;
+    animation: blob-float 30s infinite alternate cubic-bezier(0.45, 0, 0.55, 1);
+}
+
+.dash-blob-1 {
+    top: -200px;
+    left: -200px;
+}
+
+.dash-blob-2 {
+    bottom: -200px;
+    right: -200px;
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.08) 0%, rgba(59, 130, 246, 0.08) 100%);
+    animation-delay: -10s;
+}
+
+@keyframes blob-float {
+    0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(150px, 100px) scale(1.15) rotate(25deg);
+    }
+}
+
+/* Premium Admin Dropdowns */
+.admin-theme-layout .admin-dropdown {
+    position: absolute !important;
+    top: calc(100% + 12px) !important;
+    right: -10px !important;
+    width: min(calc(100vw - 2rem), 420px) !important;
+    background: #374151 !important;
+    backdrop-filter: blur(28px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(99, 102, 241, 0.15) !important;
+    border-radius: 20px !important;
+    z-index: 99999 !important;
+    transform-origin: top right;
+}
+
+.admin-theme-layout .admin-dropdown-header {
+    background: #4b5563 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+    padding: 1.25rem 1.5rem !important;
+    border-radius: 20px 20px 0 0 !important;
+}
+
+.admin-theme-layout .admin-dropdown-item {
+    padding: 1.25rem 1.5rem !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.2s ease-out !important;
+    background: #374151 !important;
+}
+
+.admin-theme-layout .admin-dropdown-item:hover {
+    background: #4b5563 !important;
+}
+
+.admin-theme-layout .admin-dropdown-item.unread {
+    background: #3b4252 !important;
+    border-left: 3px solid #6366f1 !important;
+}
+
+/* Header Icon Buttons */
+.admin-theme-layout .admin-header-btn {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #94a3b8 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+}
+
+.admin-theme-layout .admin-header-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+}
+
+.admin-theme-layout .admin-header-badge {
+    position: absolute !important;
+    top: -5px !important;
+    right: -5px !important;
+    background: #ef4444 !important;
+    color: white !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    padding: 0 4px !important;
+    border-radius: 9px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 2px solid #0f172a !important;
+}

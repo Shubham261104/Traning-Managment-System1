@@ -1,0 +1,107 @@
+.welcome-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.welcome-content {
+    text-align: center;
+    position: relative;
+}
+
+.namaste-text {
+    font-size: 5rem;
+    font-weight: 800;
+    background: linear-gradient(to right, #6366f1, #a855f7, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUpFade 0.8s ease-out forwards 0.3s;
+    font-family: 'Inter', sans-serif;
+    /* Or a Hindi-supporting font if needed, but Inter usually has good coverage or fallback */
+    margin-bottom: 1rem;
+}
+
+.role-text {
+    font-size: 2.5rem;
+    color: #94a3b8;
+    font-weight: 600;
+    opacity: 0;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: fadeIn 0.8s ease-out forwards 1s;
+}
+
+.welcome-line {
+    width: 0;
+    height: 4px;
+    background: white;
+    margin: 2rem auto;
+    border-radius: 2px;
+    animation: expandLine 1s ease-out forwards 1.2s;
+    background: linear-gradient(90deg, transparent, #6366f1, #a855f7, transparent);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes expandLine {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+
+    to {
+        width: 150px;
+        opacity: 1;
+    }
+}
+
+/* Slide out animation for exit */
+.welcome-exit {
+    animation: fadeOut 0.5s ease-in forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(1.1);
+        pointer-events: none;
+    }
+}
