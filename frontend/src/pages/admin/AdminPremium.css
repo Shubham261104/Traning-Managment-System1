@@ -1,0 +1,335 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --admin-font: 'Plus Jakarta Sans', sans-serif;
+    --admin-primary: #6366f1;
+    --admin-secondary: #a855f7;
+    --admin-bg: #0f172a;
+    --admin-card-bg: rgba(255, 255, 255, 0.04);
+    --admin-border: rgba(255, 255, 255, 0.08);
+    --admin-text-main: #ffffff;
+    --admin-text-sub: #94a3b8;
+    --admin-card-hover: rgba(255, 255, 255, 0.06);
+    --admin-input-bg: rgba(15, 23, 42, 0.6);
+    --admin-modal-bg: #111827;
+    --admin-modal-overlay: rgba(8, 12, 21, 0.85);
+}
+
+:root.light {
+    --admin-bg: #f8fafc;
+    --admin-card-bg: rgba(255, 255, 255, 0.8);
+    --admin-border: rgba(0, 0, 0, 0.08);
+    --admin-text-main: #0f172a;
+    --admin-text-sub: #64748b;
+    --admin-card-hover: rgba(255, 255, 255, 1);
+    --admin-input-bg: #ffffff;
+    --admin-modal-bg: #ffffff;
+    --admin-modal-overlay: rgba(255, 255, 255, 0.8);
+}
+
+/* Premium Content Styles for Admin Pages */
+.admin-premium-root {
+    font-family: var(--admin-font);
+}
+
+.admin-glass-card {
+    background: var(--admin-card-bg) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid var(--admin-border) !important;
+    border-radius: 28px !important;
+    padding: 1.75rem;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.admin-glass-card:hover {
+    transform: translateY(-10px) scale(1.01);
+    background: var(--admin-card-hover) !important;
+    border-color: rgba(99, 102, 241, 0.35) !important;
+    box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.1),
+        0 0 20px rgba(99, 102, 241, 0.05) !important;
+}
+
+.admin-glass-card:hover::before {
+    opacity: 1;
+}
+
+.admin-premium-btn {
+    background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-secondary) 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 16px !important;
+    font-weight: 800 !important;
+    padding: 1rem 2rem !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.4) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    font-size: 0.85rem !important;
+}
+
+.admin-premium-btn:hover {
+    transform: translateY(-3px) scale(1.05) !important;
+    box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.6) !important;
+    filter: brightness(1.1);
+}
+
+.admin-premium-btn:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+.admin-secondary-btn {
+    background: var(--admin-card-bg) !important;
+    color: var(--admin-text-sub) !important;
+    border: 1px solid var(--admin-border) !important;
+    border-radius: 16px !important;
+    font-weight: 700 !important;
+    padding: 1rem 2rem !important;
+    transition: all 0.3s !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    font-size: 0.85rem !important;
+}
+
+.admin-secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+}
+
+/* Modals */
+.admin-modal-overlay {
+    background: rgba(8, 12, 21, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+}
+
+.admin-modal-content {
+    background: #111827 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 40px !important;
+    color: white !important;
+    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.7) !important;
+}
+
+.admin-input {
+    background: var(--admin-input-bg) !important;
+    border: 1.5px solid var(--admin-border) !important;
+    border-radius: 16px !important;
+    color: var(--admin-text-main) !important;
+    padding: 1rem 1.25rem !important;
+    width: 100% !important;
+    outline: none !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    font-size: 1rem !important;
+}
+
+.admin-input:focus {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border-color: var(--admin-primary) !important;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15) !important;
+}
+
+.admin-input::placeholder {
+    color: rgba(148, 163, 184, 0.5) !important;
+}
+
+.admin-search-input {
+    padding-left: 3.25rem !important;
+}
+
+.admin-label {
+    color: var(--admin-text-sub) !important;
+    font-size: 0.8rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 0.65rem !important;
+    display: block !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+}
+
+/* Table styles */
+.admin-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.85rem;
+}
+
+.admin-table thead th {
+    font-weight: 800;
+    padding-bottom: 1.5rem;
+}
+
+.admin-table tr {
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.3s;
+}
+
+.admin-table tr:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.admin-table td {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.admin-table td:first-child {
+    border-left: 1px solid rgba(255, 255, 255, 0.04);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.admin-table td:last-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+@keyframes dashCardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.98);
+        filter: blur(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+.animate-dashCardFadeIn {
+    animation: dashCardFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 10px !important;
+    border: 2px solid transparent !important;
+    background-clip: content-box !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Glass Badge */
+.glass-badge {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 0.35rem 1rem !important;
+    border-radius: 12px !important;
+    font-size: 0.7rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.glass-badge-indigo {
+    background: rgba(99, 102, 241, 0.12) !important;
+    border-color: rgba(99, 102, 241, 0.25) !important;
+    color: #818cf8 !important;
+}
+
+.glass-badge-emerald {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: rgba(16, 185, 129, 0.25) !important;
+    color: #34d399 !important;
+}
+
+/* ... existing styles ... */
+.text-premium-gradient {
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-weight: 800 !important;
+}
+
+/* Premium Animations & Utilities */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.animate-float {
+    animation: float 4s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shimmer-bg {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.03) 50%,
+            rgba(255, 255, 255, 0) 100%) !important;
+    background-size: 200% 100% !important;
+    animation: shimmer 2s infinite linear !important;
+}
+
+.tracking-tightest {
+    letter-spacing: -0.02em !important;
+}
+
+.tracking-widest-xl {
+    letter-spacing: 0.25em !important;
+}
+
+/* Immersive Card Hover Overlay */
+.admin-glass-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255, 255, 255, 0.06), transparent 40%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.admin-glass-card:hover::after {
+    opacity: 1;
+}
