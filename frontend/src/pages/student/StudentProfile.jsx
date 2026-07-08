@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react'
 import Layout from '../../components/Layout'
 import AuthContext from '../../context/AuthContext'
 import axios from 'axios'
-import { FiUser, FiMail, FiPhone, FiMapPin, FiCalendar, FiEdit2, FiSave, FiCamera, FiBook, FiAward, FiX, FiShield, FiBriefcase, FiZap } from 'react-icons/fi'
+import { FiUser, FiMail, FiPhone, FiMapPin, FiCalendar, FiEdit2, FiSave, FiCamera, FiBook, FiAward, FiX, FiShield, FiZap } from 'react-icons/fi'
 import '../admin/AdminPremium.css'
 
 const StudentProfile = () => {
@@ -16,9 +16,21 @@ const StudentProfile = () => {
     const [message, setMessage] = useState({ type: '', text: '' })
     const [uploadingAvatar, setUploadingAvatar] = useState(false)
 
+    // Security configurations state
+    const [loginHistory, setLoginHistory] = useState([])
+    const [twoFactorEnabled, setTwoFactorEnabled] = useState(false)
+    const [loadingSecurity, setLoadingSecurity] = useState(false)
+
     useEffect(() => {
         fetchProfile()
+        fetchSecuritySettings()
     }, [])
+
+    useEffect(() => {
+        if (user) {
+            setTwoFactorEnabled(user.twoFactorEnabled || false)
+        }
+    }, [user])
 
     const fetchProfile = async () => {
         try {
@@ -27,13 +39,55 @@ const StudentProfile = () => {
                 axios.get('/api/auth/me')
             ])
             setProfile(profileRes.data)
-            setUser(userRes.data)
+            setUser(userRes.data?.user || userRes.data)
             setFormData(profileRes.data)
         } catch (error) {
             console.error('Error fetching profile:', error)
             setMessage({ type: 'error', text: 'Failed to load profile' })
         } finally {
             setLoading(false)
+        }
+    }
+
+    const fetchSecuritySettings = async () => {
+        try {
+            const historyRes = await axios.get('/api/auth/login-history')
+            setLoginHistory(historyRes.data.loginHistory || [])
+        } catch (err) {
+            console.error('Error fetching login history:', err)
+        }
+    }
+
+    const handleToggle2FA = async () => {
+        setLoadingSecurity(true)
+        try {
+            const res = await axios.post('/api/auth/toggle-2fa')
+            setTwoFactorEnabled(res.data.twoFactorEnabled)
+            setMessage({ type: 'success', text: res.data.message })
+            setTimeout(() => setMessage({ type: '', text: '' }), 4000)
+            await fetchProfile()
+        } catch (err) {
+            console.error(err)
+            setMessage({ type: 'error', text: 'Failed to update 2FA configuration.' })
+            setTimeout(() => setMessage({ type: '', text: '' }), 4000)
+        } finally {
+            setLoadingSecurity(false)
+        }
+    }
+
+    const handleLogoutAllDevices = async () => {
+        setLoadingSecurity(true)
+        try {
+            const res = await axios.post('/api/auth/logout-all-devices')
+            setMessage({ type: 'success', text: res.data.message })
+            setTimeout(() => setMessage({ type: '', text: '' }), 4000)
+            fetchSecuritySettings()
+        } catch (err) {
+            console.error(err)
+            setMessage({ type: 'error', text: 'Failed to clear other sessions.' })
+            setTimeout(() => setMessage({ type: '', text: '' }), 4000)
+        } finally {
+            setLoadingSecurity(false)
         }
     }
 
@@ -154,7 +208,7 @@ const StudentProfile = () => {
                                 <div className="relative w-full h-full rounded-full bg-[#0f172a] border-4 border-white/5 flex items-center justify-center overflow-hidden shadow-2xl">
                                     {profile?.avatar ? (
                                         <img
-                                            src={profile.avatar.startsWith('http') ? profile.avatar : `http://localhost:5000${profile.avatar}`}
+                                            src={profile.avatar.startsWith('http') ? profile.avatar : `http://localhost:5001${profile.avatar}`}
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                         />
@@ -367,6 +421,84 @@ const StudentProfile = () => {
                                     <p className="text-white font-bold bg-white/5 px-5 py-4 rounded-2xl border border-white/5 tracking-tight uppercase">
                                         {profile?.enrollmentDate ? new Date(profile.enrollmentDate).toLocaleDateString() : 'PENDING'}
                                     </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Security Suite & Device Management */}
+                        <div className="admin-glass-card p-10">
+                            <div className="flex items-center gap-4 mb-10">
+                                <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-red-500 border border-white/5">
+                                    <FiShield size={20} />
+                                </div>
+                                <h3 className="text-2xl font-black text-white uppercase tracking-tight">Security & Device Registry</h3>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                <div className="space-y-6">
+                                    <h4 className="text-sm font-black text-[#94a3b8] uppercase tracking-wider">Access Controls</h4>
+                                    
+                                    <div className="flex flex-col gap-4 p-5 bg-white/5 rounded-2xl border border-white/5">
+                                        <div className="flex items-center justify-between">
+                                            <p className="text-white font-extrabold text-sm">Two-Factor Auth</p>
+                                            <button
+                                                onClick={handleToggle2FA}
+                                                disabled={loadingSecurity}
+                                                style={{
+                                                    backgroundColor: twoFactorEnabled ? '#10b981' : 'rgba(255,255,255,0.05)',
+                                                    border: '1px solid',
+                                                    borderColor: twoFactorEnabled ? '#10b981' : 'rgba(255,255,255,0.1)',
+                                                    color: '#fff',
+                                                    transition: 'all 0.3s ease'
+                                                }}
+                                                className="px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-widest cursor-pointer outline-none"
+                                            >
+                                                {twoFactorEnabled ? 'Enabled' : 'Disabled'}
+                                            </button>
+                                        </div>
+                                        <p className="text-xs text-[#94a3b8]">Enabling code requests guards logins using direct OTP codes sent to your registered email address.</p>
+                                    </div>
+
+                                    <div className="p-5 bg-white/5 rounded-2xl border border-white/5">
+                                        <p className="text-white font-extrabold text-sm">Session Expiry policy</p>
+                                        <p className="text-xs text-[#94a3b8] mt-1">Automatic account timeouts trigger after 15 minutes of user inactivity monitor detection.</p>
+                                    </div>
+
+                                    <div className="p-5 bg-white/5 rounded-2xl border border-white/5">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="text-white font-extrabold text-sm font-bold">Device Sessions</p>
+                                                <p className="text-xs text-[#94a3b8] mt-1">Terminate every other active token session.</p>
+                                            </div>
+                                            <button
+                                                onClick={handleLogoutAllDevices}
+                                                disabled={loadingSecurity}
+                                                className="px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 rounded-xl font-bold text-xs uppercase tracking-widest cursor-pointer outline-none transition-all"
+                                            >
+                                                Logout All
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-6">
+                                    <h4 className="text-sm font-black text-[#94a3b8] uppercase tracking-wider">Recent Login History Logs</h4>
+                                    
+                                    <div className="max-h-[300px] overflow-y-auto space-y-3 pr-2 scrollbar-thin">
+                                        {loginHistory.length === 0 ? (
+                                            <p className="text-sm text-[#94a3b8] italic">No registration history items logged yet.</p>
+                                        ) : (
+                                            loginHistory.map((item, idx) => (
+                                                <div key={idx} className="flex justify-between items-center p-4 bg-white/5 rounded-xl border border-white/5 text-[11px]">
+                                                    <div>
+                                                        <p className="font-extrabold text-white">{item.deviceType || 'Desktop Device'}</p>
+                                                        <p className="text-gray-400 mt-1">IP: {item.ipAddress}</p>
+                                                    </div>
+                                                    <span className="text-[#94a3b8] font-mono">{new Date(item.loginTime).toLocaleDateString()} {new Date(item.loginTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
