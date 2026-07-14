@@ -13,18 +13,7 @@ import AdminInstructors from './pages/admin/AdminInstructors'
 import AdminAnnouncements from './pages/admin/AdminAnnouncements'
 import AdminTeam from './pages/admin/AdminTeam'
 import InstructorDashboard from './pages/instructor/InstructorDashboard'
-import InstructorCourses from './pages/instructor/InstructorCourses'
-import InstructorQuizzes from './pages/instructor/InstructorQuizzes'
-import InstructorQuizAttempts from './pages/instructor/InstructorQuizAttempts'
-import InstructorAnnouncements from './pages/instructor/InstructorAnnouncements'
-import InstructorProfile from './pages/instructor/InstructorProfile'
 import StudentDashboard from './pages/student/StudentDashboard'
-import StudentCourses from './pages/student/StudentCourses'
-import StudentQuizzes from './pages/student/StudentQuizzes'
-import StudentCertificates from './pages/student/StudentCertificates'
-import StudentCourseMaterials from './pages/student/StudentCourseMaterials'
-import StudentProfile from './pages/student/StudentProfile'
-import QuizTake from './pages/student/QuizTake'
 import HelpSupport from './pages/HelpSupport'
 import AboutUs from './pages/public/AboutUs'
 import ContactUs from './pages/public/ContactUs'
@@ -37,7 +26,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>
-          <Router>
+          <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -60,23 +49,12 @@ function App() {
 
               <Route path="/instructor" element={<PrivateRoute allowedRoles={['instructor']} />}>
                 <Route index element={<InstructorDashboard />} />
-                <Route path="courses" element={<InstructorCourses />} />
-                <Route path="quizzes" element={<InstructorQuizzes />} />
-                <Route path="quizzes/:quizId/attempts" element={<InstructorQuizAttempts />} />
-                <Route path="announcements" element={<InstructorAnnouncements />} />
-                <Route path="profile" element={<InstructorProfile />} />
-                <Route path="support" element={<HelpSupport />} />
+                <Route path="*" element={<InstructorDashboard />} />
               </Route>
 
               <Route path="/student" element={<PrivateRoute allowedRoles={['student']} />}>
                 <Route index element={<StudentDashboard />} />
-                <Route path="courses" element={<StudentCourses />} />
-                <Route path="courses/:courseId/materials" element={<StudentCourseMaterials />} />
-                <Route path="quizzes" element={<StudentQuizzes />} />
-                <Route path="certificates" element={<StudentCertificates />} />
-                <Route path="quiz/:quizId" element={<QuizTake />} />
-                <Route path="profile" element={<StudentProfile />} />
-                <Route path="support" element={<HelpSupport />} />
+                <Route path="*" element={<StudentDashboard />} />
               </Route>
             </Routes>
           </Router>

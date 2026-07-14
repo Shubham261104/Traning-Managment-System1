@@ -6,6 +6,7 @@ axios.defaults.baseURL = import.meta.env.VITE_API_URL || ''
 axios.defaults.headers.common['Content-Type'] = 'application/json'
 
 const AuthContext = createContext()
+let refreshPromise = null
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
@@ -13,6 +14,14 @@ export const AuthProvider = ({ children }) => {
 
   // Configure Axios Request & Response Interceptors for Refresh Token Rotation
   useEffect(() => {
+    const clearSession = () => {
+      localStorage.removeItem('token')
+      localStorage.removeItem('refreshToken')
+      delete axios.defaults.headers.common['Authorization']
+      setUser(null)
+      setLoading(false)
+    }
+
     const requestInterceptor = axios.interceptors.request.use(
       (config) => {
         const token = localStorage.getItem('token')
@@ -28,31 +37,48 @@ export const AuthProvider = ({ children }) => {
       (response) => response,
       async (error) => {
         const originalRequest = error.config
-        // Avoid infinite loop if refresh itself fails
+        const requestUrl = originalRequest?.url || ''
+        const isAuthRequest = requestUrl.includes('/api/auth/login') ||
+          requestUrl.includes('/api/auth/register') ||
+          requestUrl.includes('/api/auth/refresh') ||
+          requestUrl.includes('/api/auth/me')
+
         if (
           error.response?.status === 401 &&
+          originalRequest &&
           !originalRequest._retry &&
-          originalRequest.url !== '/api/auth/refresh' &&
-          originalRequest.url !== '/api/auth/login' &&
-          originalRequest.url !== '/api/auth/me'
+          !isAuthRequest
         ) {
           originalRequest._retry = true
           try {
             const refreshToken = localStorage.getItem('refreshToken')
-            if (refreshToken) {
-              const res = await axios.post('/api/auth/refresh', { refreshToken })
+            if (!refreshToken) {
+              clearSession()
+              return Promise.reject(error)
+            }
+
+            if (!refreshPromise) {
+              refreshPromise = axios
+                .post('/api/auth/refresh', { refreshToken }, { skipAuthRefresh: true })
+                .finally(() => {
+                  refreshPromise = null
+                })
+            }
+
+            const res = await refreshPromise
+            if (res?.data?.token) {
               const { token, refreshToken: newRefreshToken } = res.data
-              
+
               localStorage.setItem('token', token)
               localStorage.setItem('refreshToken', newRefreshToken)
-              
+
               axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
               originalRequest.headers['Authorization'] = `Bearer ${token}`
               return axios(originalRequest)
             }
           } catch (refreshError) {
-            // Revoke state if refresh token is expired/invalid
-            logout()
+            clearSession()
+            return Promise.reject(refreshError)
           }
         }
         return Promise.reject(error)
@@ -105,7 +131,10 @@ export const AuthProvider = ({ children }) => {
       const res = await axios.get('/api/auth/me')
       setUser(res.data.user)
     } catch (error) {
-      logout()
+      localStorage.removeItem('token')
+      localStorage.removeItem('refreshToken')
+      delete axios.defaults.headers.common['Authorization']
+      setUser(null)
     } finally {
       setLoading(false)
     }
