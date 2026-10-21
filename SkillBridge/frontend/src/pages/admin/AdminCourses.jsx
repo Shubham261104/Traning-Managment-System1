@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Layout from '../../components/Layout'
 import axios from 'axios'
-import { FiPlus, FiEdit, FiArchive, FiUsers, FiClock, FiCalendar, FiX, FiLayers, FiBookOpen, FiDatabase, FiAward, FiActivity } from 'react-icons/fi'
+import { FiPlus, FiEdit, FiArchive, FiUsers, FiClock, FiCalendar, FiX, FiLayers, FiBookOpen, FiDatabase, FiAward, FiActivity, FiAlertTriangle } from 'react-icons/fi'
 import './AdminPremium.css'
 
 const AdminCourses = () => {
@@ -17,7 +17,8 @@ const AdminCourses = () => {
     instructor: '',
     startDate: '',
     endDate: '',
-    category: ''
+    category: '',
+    deliveryType: 'LIVE_CLASS'
   })
   const [loading, setLoading] = useState(true)
 
@@ -64,7 +65,8 @@ const AdminCourses = () => {
         instructor: '',
         startDate: '',
         endDate: '',
-        category: ''
+        category: '',
+        deliveryType: 'LIVE_CLASS'
       })
       fetchCourses()
     } catch (error) {
@@ -82,7 +84,8 @@ const AdminCourses = () => {
       instructor: course.instructor?._id || course.instructor,
       startDate: course.startDate?.split('T')[0] || '',
       endDate: course.endDate?.split('T')[0] || '',
-      category: course.category || ''
+      category: course.category || '',
+      deliveryType: course.deliveryType || 'LIVE_CLASS'
     })
     setShowModal(true)
   }
@@ -181,6 +184,15 @@ const AdminCourses = () => {
                       : 'bg-white/5 text-[#64748b] border-white/10'
                       }`}>
                       {course.status}
+                    </div>
+                    <div className={`inline-flex px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border ml-2 ${
+                      (course.deliveryType || 'LIVE_CLASS') === 'LIVE_CLASS'
+                        ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                        : (course.deliveryType === 'RECORDED'
+                            ? 'bg-teal-500/10 text-teal-400 border-teal-500/20'
+                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20')
+                    }`}>
+                      {(course.deliveryType || 'LIVE_CLASS').replace('_', ' ')}
                     </div>
                   </div>
                 </div>
@@ -378,17 +390,43 @@ const AdminCourses = () => {
 
                       <section>
                         <h3 className="text-sm font-black text-indigo-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                          <FiDatabase size={16} /> Classification
+                          <FiDatabase size={16} /> Classification & Delivery Type
                         </h3>
-                        <div className="space-y-2">
-                          <label className="text-[10px] font-black text-[#64748b] uppercase tracking-widest pl-1 leading-none">Course Category</label>
-                          <input
-                            type="text"
-                            value={formData.category}
-                            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                            className="admin-input"
-                            placeholder="e.g. Technology"
-                          />
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-black text-[#64748b] uppercase tracking-widest pl-1 leading-none">Course Category</label>
+                            <input
+                              type="text"
+                              value={formData.category}
+                              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                              className="admin-input"
+                              placeholder="e.g. Technology"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-black text-[#64748b] uppercase tracking-widest pl-1 leading-none">Batch Delivery Type</label>
+                            <select
+                              value={formData.deliveryType}
+                              onChange={(e) => setFormData({ ...formData, deliveryType: e.target.value })}
+                              className="admin-input appearance-none cursor-pointer"
+                              required
+                            >
+                              <option value="LIVE_CLASS" className="bg-[#0f172a]">Live Class (Attendance Enabled)</option>
+                              <option value="RECORDED" className="bg-[#0f172a]">Recorded Video Batch (Learning Progress)</option>
+                              <option value="MATERIAL_BASED" className="bg-[#0f172a]">Material / Document Based (Learning Progress)</option>
+                            </select>
+                          </div>
+
+                          {editingCourse && formData.deliveryType !== (editingCourse.deliveryType || 'LIVE_CLASS') && (
+                            <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-300 text-xs leading-relaxed flex items-start gap-3 mt-4">
+                              <FiAlertTriangle className="text-amber-400 text-lg flex-shrink-0 mt-0.5" />
+                              <div>
+                                <span className="font-bold block mb-1">Delivery Type Change Warning</span>
+                                Changing the delivery type will change how attendance and progress are tracked for this batch. Existing attendance records will be preserved.
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </section>
                     </div>

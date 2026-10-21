@@ -73,6 +73,20 @@ const courseSchema = new mongoose.Schema({
   category: {
     type: String,
     trim: true
+  },
+  thumbnail: {
+    type: String,
+    default: ''
+  },
+  difficulty: {
+    type: String,
+    enum: ['Beginner', 'Intermediate', 'Advanced'],
+    default: 'Intermediate'
+  },
+  deliveryType: {
+    type: String,
+    enum: ['LIVE_CLASS', 'RECORDED', 'MATERIAL_BASED'],
+    default: 'LIVE_CLASS'
   }
 }, {
   timestamps: true

@@ -46,7 +46,25 @@ const enrollmentSchema = new mongoose.Schema({
       type: Date,
       default: Date.now
     }
-  }]
+  }],
+  isBlocked: {
+    type: Boolean,
+    default: false
+  },
+  blockedUntil: {
+    type: Date
+  },
+  teacherRating: {
+    type: Number,
+    min: 1,
+    max: 5,
+    default: null
+  },
+  teacherNotes: {
+    type: String,
+    trim: true,
+    default: ''
+  }
 }, {
   timestamps: true
 });

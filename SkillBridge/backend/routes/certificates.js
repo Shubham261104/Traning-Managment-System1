@@ -13,22 +13,38 @@ router.post('/generate', auth, async (req, res) => {
     const { courseId } = req.body;
     const userId = req.user._id;
 
-    // Check if enrollment is completed
+    // Check if enrollment is completed or progress is 100%
     const enrollment = await Enrollment.findOne({
       student: userId,
       course: courseId,
       status: 'approved',
-      completed: true
+      $or: [
+        { completed: true },
+        { progress: { $gte: 100 } }
+      ]
     });
 
     if (!enrollment) {
       return res.status(400).json({ message: 'Course not completed' });
     }
 
+    // Auto-fix completed state if progress is 100% but completed flag was false
+    if (enrollment.progress >= 100 && !enrollment.completed) {
+      enrollment.completed = true;
+      enrollment.completedAt = enrollment.completedAt || new Date();
+      await enrollment.save();
+    }
+
     // Check if certificate already exists
     let certificate = await Certificate.findOne({
       student: userId,
       course: courseId
+    }).populate({
+      path: 'course',
+      populate: {
+        path: 'instructor',
+        populate: { path: 'profile' }
+      }
     });
 
     if (certificate) {
@@ -38,8 +54,10 @@ router.post('/generate', auth, async (req, res) => {
     // Generate certificate
     const course = await Course.findById(courseId);
     const user = await User.findById(userId).populate('profile');
-    const certificateId = `CERT-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
-    const verificationCode = Math.random().toString(36).substr(2, 15).toUpperCase();
+    const certNumber = Math.floor(100000 + Math.random() * 900000);
+    const certCode = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const certificateId = `SKB-${certNumber}-${certCode}`;
+    const verificationCode = Math.random().toString(36).substring(2, 15).toUpperCase();
 
     certificate = new Certificate({
       student: userId,
@@ -49,6 +67,16 @@ router.post('/generate', auth, async (req, res) => {
     });
 
     await certificate.save();
+
+    certificate = await Certificate.findById(certificate._id)
+      .populate({
+        path: 'course',
+        populate: { path: 'instructor', populate: { path: 'profile' } }
+      })
+      .populate({
+        path: 'student',
+        populate: { path: 'profile' }
+      });
 
     res.json({ message: 'Certificate generated successfully', certificate });
   } catch (error) {
@@ -205,6 +233,13 @@ router.get('/:id/download', auth, async (req, res) => {
       .lineWidth(1)
       .stroke();
 
+    const studentFirstName = certificate.student?.profile?.firstName || '';
+    const studentLastName = certificate.student?.profile?.lastName || '';
+    const studentName = (studentFirstName || studentLastName)
+      ? `${studentFirstName} ${studentLastName}`.trim().toUpperCase()
+      : (certificate.student?.email?.split('@')[0] || 'STUDENT').toUpperCase();
+    const courseTitle = (certificate.course?.title || 'COURSE').toUpperCase();
+
     // Content - Adjusted spacing
     doc.fillColor('#94a3b8')
       .fontSize(14)
@@ -212,7 +247,7 @@ router.get('/:id/download', auth, async (req, res) => {
 
     doc.fillColor('#ffffff')
       .fontSize(36)
-      .text(`${certificate.student.profile.firstName} ${certificate.student.profile.lastName}`.toUpperCase(), 0, doc.y + 12, { align: 'center', width: pageWidth });
+      .text(studentName, 0, doc.y + 12, { align: 'center', width: pageWidth });
 
     doc.fillColor('#94a3b8')
       .fontSize(14)
@@ -220,7 +255,7 @@ router.get('/:id/download', auth, async (req, res) => {
 
     doc.fillColor('#fbbf24')
       .fontSize(24)
-      .text(certificate.course.title.toUpperCase(), 0, doc.y + 12, { align: 'center', width: pageWidth });
+      .text(courseTitle, 0, doc.y + 12, { align: 'center', width: pageWidth });
 
     // Bottom Section (Signatures & Verification)
     const bottomY = pageHeight - 120;

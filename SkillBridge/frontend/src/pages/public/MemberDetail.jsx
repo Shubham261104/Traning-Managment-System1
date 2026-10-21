@@ -4,8 +4,7 @@ import axios from 'axios'
 import AuthContext from '../../context/AuthContext'
 import {
     FiArrowLeft, FiMail, FiPhone, FiMapPin, FiLinkedin,
-    FiGithub, FiEye, FiCode, FiDatabase, FiLayout,
-    FiEdit2, FiCamera, FiSave, FiX, FiUpload, FiUser, FiTerminal
+    FiGithub, FiEye, FiCode, FiEdit2, FiSave, FiX, FiUpload, FiUser, FiTerminal
 } from 'react-icons/fi'
 import './MemberDetail.css'
 
@@ -20,6 +19,36 @@ const MemberDetail = () => {
     const [uploading, setUploading] = useState(false)
     const [formData, setFormData] = useState({})
 
+    const shubhamDefaultData = {
+        memberId: 'shubham-kumar',
+        name: 'Shubham Kumar',
+        role: 'Full-Stack Developer & Project Visionary',
+        quote: '“Building smarter learning experiences through technology, innovation, and real-time collaboration.”',
+        about: 'Shubham Kumar is a passionate Full-Stack Developer focused on building scalable and user-friendly web applications. He envisioned the Training Center Management System to bring students, instructors, and administrators together on a single intelligent platform.',
+        projectRole: 'Project Lead & Full-Stack Developer',
+        email: 'shubham@example.com',
+        phone: '+91 98765 43210',
+        location: 'Patna, India',
+        skills: [
+            'Full-Stack Web Development',
+            'React.js & JavaScript',
+            'Node.js & Express.js',
+            'MongoDB',
+            'REST API Development',
+            'Authentication & Role-Based Access',
+            'Dashboard & Analytics',
+            'Real-Time Features'
+        ],
+        focus: 'Full-Stack Development • System Architecture • UI/UX • Real-Time Applications',
+        highlights: [
+            { icon: '💡', title: 'Vision', desc: 'To create a unified platform that makes training management simple, smart, and accessible.' },
+            { icon: '⚡', title: 'Innovation', desc: 'Combining modern web technologies with analytics, collaboration, automation, and AI-powered learning tools.' },
+            { icon: '🎯', title: 'Mission', desc: 'Empowering students, instructors, and administrators with technology that improves the complete learning journey.' }
+        ],
+        linkedin: 'https://www.linkedin.com/in/shubham260606/',
+        github: 'https://github.com/Shubham261104'
+    }
+
     useEffect(() => {
         fetchMember()
     }, [id])
@@ -27,10 +56,18 @@ const MemberDetail = () => {
     const fetchMember = async () => {
         try {
             const res = await axios.get(`/api/team/${id}`)
-            setMember(res.data)
-            setFormData(res.data)
+            if (res.data && (id === 'shubham-kumar' || res.data.memberId === 'shubham-kumar')) {
+                const merged = { ...shubhamDefaultData, ...res.data }
+                setMember(merged)
+                setFormData(merged)
+            } else {
+                setMember(res.data)
+                setFormData(res.data)
+            }
         } catch (error) {
             console.error('Error fetching member:', error)
+            setMember(shubhamDefaultData)
+            setFormData(shubhamDefaultData)
         } finally {
             setLoading(false)
         }
@@ -85,9 +122,7 @@ const MemberDetail = () => {
         </div>
     )
 
-    let Icon = FiCode
-    if (member.memberId === 'amrit-raj') Icon = FiLayout
-    if (member.memberId === 'harsh-kumar') Icon = FiDatabase
+    const highlights = member.highlights || shubhamDefaultData.highlights
 
     return (
         <div className="profile-detail-page">
@@ -98,12 +133,12 @@ const MemberDetail = () => {
             </div>
 
             <main className="profile-content-wrapper">
-                <Link to="/about" className="back-btn-top">
-                    <FiArrowLeft /> Back to Visionaries
+                <Link to="/" className="back-btn-top">
+                    <FiArrowLeft /> Back to Home
                 </Link>
 
                 <div className="glass-detail-card">
-                    {/* Admin Badge/Toggle */}
+                    {/* Admin Toggle */}
                     {isAdmin && (
                         <div className="admin-badge-overlay">
                             {isEditing ? (
@@ -126,21 +161,10 @@ const MemberDetail = () => {
                     {/* Banner */}
                     <div className="profile-banner"></div>
 
-                    {/* Header Info */}
+                    {/* Header Info (No Photo - Developer Icon Badge) */}
                     <div className="profile-header-main">
-                        <div className="detail-avatar-container group">
-                            {member.avatar ? (
-                                <img src={member.avatar} alt={member.name} />
-                            ) : (
-                                <div className="detail-avatar-initial">{member.name.charAt(0)}</div>
-                            )}
-
-                            {isAdmin && (
-                                <label className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                    <FiCamera className="text-white text-4xl" />
-                                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'avatar')} disabled={uploading} />
-                                </label>
-                            )}
+                        <div className="detail-avatar-container flex items-center justify-center">
+                            <div className="text-5xl">👨‍💻</div>
                         </div>
 
                         <div className="profile-name-title">
@@ -152,10 +176,26 @@ const MemberDetail = () => {
                             ) : (
                                 <>
                                     <h1>{member.name}</h1>
-                                    <div className="role-tag">{member.role}</div>
+                                    <div className="role-tag">{member.role || 'Full-Stack Developer & Project Visionary'}</div>
                                 </>
                             )}
                         </div>
+                    </div>
+
+                    {/* Quote Banner */}
+                    <div className="px-8 py-4 my-4 bg-indigo-500/10 border-l-4 border-indigo-500 text-indigo-200 italic rounded-r-xl text-center text-lg">
+                        {member.quote || '“Building smarter learning experiences through technology, innovation, and real-time collaboration.”'}
+                    </div>
+
+                    {/* 3 Highlights Cards (Vision, Innovation, Mission) */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+                        {highlights.map((item, idx) => (
+                            <div key={idx} className="p-5 bg-white/5 border border-white/10 rounded-2xl">
+                                <div className="text-3xl mb-2">{item.icon}</div>
+                                <h4 className="text-lg font-bold text-white mb-2">{item.title}</h4>
+                                <p className="text-gray-300 text-sm leading-relaxed">{item.desc}</p>
+                            </div>
+                        ))}
                     </div>
 
                     {/* Details Grid */}
@@ -166,7 +206,7 @@ const MemberDetail = () => {
                                 {isEditing ? (
                                     <textarea name="about" value={formData.about} onChange={handleInputChange} rows="8" className="edit-mode-input" />
                                 ) : (
-                                    <p>{member.about}</p>
+                                    <p className="text-gray-300 leading-relaxed text-base">{member.about}</p>
                                 )}
                             </section>
 
@@ -174,21 +214,21 @@ const MemberDetail = () => {
                                 <h3><FiTerminal className="text-indigo-500" /> Project Role</h3>
                                 <div className="p-6 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-6">
                                     <div className="p-4 bg-indigo-500/10 rounded-xl">
-                                        <Icon className="text-indigo-400 text-3xl" />
+                                        <FiCode className="text-indigo-400 text-3xl" />
                                     </div>
                                     <div className="flex-1">
                                         {isEditing ? (
                                             <input name="projectRole" value={formData.projectRole} onChange={handleInputChange} className="edit-mode-input mb-2" placeholder="Project Role" />
                                         ) : (
-                                            <h4 className="text-xl font-bold text-white mb-1">{member.projectRole}</h4>
+                                            <h4 className="text-xl font-bold text-white mb-1">{member.projectRole || 'Project Lead & Full-Stack Developer'}</h4>
                                         )}
-                                        <p className="text-indigo-300 text-sm font-medium">Primary Implementation Authority</p>
+                                        <p className="text-indigo-300 text-sm font-medium">Primary Implementation & Technical Lead</p>
                                     </div>
                                 </div>
                             </section>
 
                             <section className="info-section">
-                                <h3><FiCode className="text-indigo-500" /> Technical Mastery</h3>
+                                <h3><FiCode className="text-indigo-500" /> Expertise & Mastery</h3>
                                 {isEditing ? (
                                     <input name="skills" value={Array.isArray(formData.skills) ? formData.skills.join(', ') : formData.skills} onChange={handleInputChange} className="edit-mode-input" placeholder="Skill 1, Skill 2, ..." />
                                 ) : (
@@ -199,6 +239,10 @@ const MemberDetail = () => {
                                     </div>
                                 )}
                             </section>
+
+                            <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl text-blue-200 text-sm font-medium">
+                                🎯 <strong>Focus:</strong> {member.focus || 'Full-Stack Development • System Architecture • UI/UX • Real-Time Applications'}
+                            </div>
                         </div>
 
                         <aside className="detail-sidebar-side">
@@ -210,7 +254,7 @@ const MemberDetail = () => {
                                         {isEditing ? (
                                             <input name="email" value={formData.email} onChange={handleInputChange} className="edit-mode-input text-sm" />
                                         ) : (
-                                            <span>{member.email}</span>
+                                            <span>{member.email || 'shubham@example.com'}</span>
                                         )}
                                     </div>
                                     <div className="contact-item">
@@ -218,7 +262,7 @@ const MemberDetail = () => {
                                         {isEditing ? (
                                             <input name="phone" value={formData.phone} onChange={handleInputChange} className="edit-mode-input text-sm" />
                                         ) : (
-                                            <span>{member.phone}</span>
+                                            <span>{member.phone || '+91 98765 43210'}</span>
                                         )}
                                     </div>
                                     <div className="contact-item">
@@ -226,7 +270,7 @@ const MemberDetail = () => {
                                         {isEditing ? (
                                             <input name="location" value={formData.location} onChange={handleInputChange} className="edit-mode-input text-sm" />
                                         ) : (
-                                            <span>{member.location}</span>
+                                            <span>{member.location || 'Patna, India'}</span>
                                         )}
                                     </div>
                                 </div>

@@ -6,8 +6,9 @@ const fs = require('fs');
 const uploadsDir = path.join(__dirname, '../uploads');
 const materialsDir = path.join(uploadsDir, 'materials');
 const avatarsDir = path.join(uploadsDir, 'avatars');
+const documentsDir = path.join(uploadsDir, 'documents');
 
-[uploadsDir, materialsDir, avatarsDir].forEach(dir => {
+[uploadsDir, materialsDir, avatarsDir, documentsDir].forEach(dir => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
@@ -19,7 +20,6 @@ const materialStorage = multer.diskStorage({
     cb(null, materialsDir);
   },
   filename: (req, file, cb) => {
-    // Generate unique filename
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const ext = path.extname(file.originalname);
     const name = path.basename(file.originalname, ext).replace(/\s+/g, '-');
@@ -33,10 +33,22 @@ const avatarStorage = multer.diskStorage({
     cb(null, avatarsDir);
   },
   filename: (req, file, cb) => {
-    // Generate unique filename
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const ext = path.extname(file.originalname);
     cb(null, `avatar-${uniqueSuffix}${ext}`);
+  }
+});
+
+// Configure storage for documents (resumes, certificates)
+const documentStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, documentsDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    const name = path.basename(file.originalname, ext).replace(/\s+/g, '-');
+    cb(null, `doc-${name}-${uniqueSuffix}${ext}`);
   }
 });
 
@@ -44,11 +56,7 @@ const avatarStorage = multer.diskStorage({
 const materialFileFilter = (req, file, cb) => {
   const ext = path.extname(file.originalname).toLowerCase();
   const allowedExts = ['.pdf', '.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm', '.doc', '.docx', '.txt', '.ppt', '.pptx', '.xls', '.xlsx'];
-
-  // Check extension
   const hasValidExt = allowedExts.includes(ext);
-
-  // Check MIME type
   const isValidMime =
     file.mimetype.startsWith('video/') ||
     file.mimetype === 'application/pdf' ||
@@ -66,12 +74,11 @@ const materialFileFilter = (req, file, cb) => {
   }
 };
 
-// File filter for avatars (images only)
+// File filter for avatars
 const avatarFileFilter = (req, file, cb) => {
   const ext = path.extname(file.originalname).toLowerCase();
   const allowedExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
 
-  // Check extension and MIME type
   if (allowedExts.includes(ext) && file.mimetype.startsWith('image/')) {
     cb(null, true);
   } else {
@@ -79,24 +86,23 @@ const avatarFileFilter = (req, file, cb) => {
   }
 };
 
-// Configure multer for materials
 const upload = multer({
   storage: materialStorage,
-  limits: {
-    fileSize: 500 * 1024 * 1024 // 500MB limit
-  },
+  limits: { fileSize: 500 * 1024 * 1024 },
   fileFilter: materialFileFilter
 });
 
-// Configure multer for avatars
 const avatarUpload = multer({
   storage: avatarStorage,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit for avatars
-  },
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: avatarFileFilter
+});
+
+const documentUpload = multer({
+  storage: documentStorage,
+  limits: { fileSize: 25 * 1024 * 1024 }
 });
 
 module.exports = upload;
 module.exports.avatarUpload = avatarUpload;
-
+module.exports.documentUpload = documentUpload;

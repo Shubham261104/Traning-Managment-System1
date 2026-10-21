@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import Layout from '../../components/Layout'
 import axios from 'axios'
 import { FiArrowLeft, FiFile, FiVideo, FiLink, FiCheckCircle, FiExternalLink } from 'react-icons/fi'
 
@@ -108,17 +107,17 @@ const StudentCourseMaterials = () => {
 
   if (loading) {
     return (
-      <Layout>
+      <div className="course-materials-wrapper">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
-      </Layout>
+      </div>
     )
   }
 
   if (!course) {
     return (
-      <Layout>
+      <div className="course-materials-wrapper">
         <div className="text-center py-8">
           <p className="text-gray-600">Course not found</p>
           <button
@@ -128,7 +127,7 @@ const StudentCourseMaterials = () => {
             Back to Courses
           </button>
         </div>
-      </Layout>
+      </div>
     )
   }
 
@@ -137,8 +136,8 @@ const StudentCourseMaterials = () => {
   const progress = totalMaterials > 0 ? Math.round((viewedCount / totalMaterials) * 100) : 0
 
   return (
-    <Layout>
-      <div className="space-y-6">
+      <div className="course-materials-wrapper w-full">
+        <div className="space-y-6">
         <div className="flex items-center space-x-4">
           <button
             onClick={() => navigate('/student/courses')}
@@ -246,7 +245,7 @@ const StudentCourseMaterials = () => {
           </p>
         </div>
       </div>
-    </Layout>
+    </div>
   )
 }
 

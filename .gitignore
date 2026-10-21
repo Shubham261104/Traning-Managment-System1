@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# OS/IDEs
+.DS_Store
+__MACOSX/
+.vscode/
+.idea/
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment / Local Secrets
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Build folders
+dist/
+**/dist/
+build/
+**/build/
+out/
+**/out/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+*.log
+
+# Temp/Query files created in workspace root
+query
+git_status.txt
+git_status_utf8.txt
+
+# Local MongoDB data directories (do not commit)
+local_db_data/
+mongodb_data/

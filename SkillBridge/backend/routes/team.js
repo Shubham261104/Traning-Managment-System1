@@ -47,14 +47,23 @@ router.post('/seed', async (req, res) => {
             {
                 memberId: 'shubham-kumar',
                 name: 'Shubham Kumar',
-                role: 'Full Stack Developer',
-                description: 'Passionate developer with expertise in MERN stack and cloud architecture. Leads the backend development and system design.',
-                about: 'A dedicated Full Stack Developer with deep knowledge of MERN stack. Shubham architecture the entire backend system of this project, ensuring scalability and security. He loves solving complex algorithmic problems and optimizing database queries.',
+                role: 'Full-Stack Developer & Project Visionary',
+                description: 'Building smarter learning experiences through technology, innovation, and real-time collaboration.',
+                about: 'Shubham Kumar is a passionate Full-Stack Developer focused on building scalable and user-friendly web applications. He envisioned the Training Center Management System to bring students, instructors, and administrators together on a single intelligent platform.',
                 email: 'shubham@example.com',
                 phone: '+91 98765 43210',
                 location: 'Patna, India',
-                projectRole: 'Lead Backend Developer & System Architect',
-                skills: ['Node.js', 'Express', 'MongoDB', 'React', 'AWS', 'System Design'],
+                projectRole: 'Project Lead & Full-Stack Developer',
+                skills: [
+                    'Full-Stack Web Development',
+                    'React.js & JavaScript',
+                    'Node.js & Express.js',
+                    'MongoDB',
+                    'REST API Development',
+                    'Authentication & Role-Based Access',
+                    'Dashboard & Analytics',
+                    'Real-Time Features'
+                ],
                 color: 'from-blue-500 to-indigo-600',
                 linkedin: 'https://www.linkedin.com/in/shubham260606/',
                 github: 'https://github.com/Shubham261104'

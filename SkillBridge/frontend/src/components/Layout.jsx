@@ -17,7 +17,8 @@ import {
     FiInfo,
     FiCommand,
     FiSun,
-    FiMoon
+    FiMoon,
+    FiVideo
 } from 'react-icons/fi'
 import AnnouncementNotifications from './AnnouncementNotifications'
 import NotificationBell from './NotificationBell'
@@ -45,6 +46,7 @@ const Layout = ({ children }) => {
                 { path: '/admin/courses', icon: FiBook, label: 'Manage Courses' },
                 { path: '/admin/students', icon: FiUsers, label: 'Manage Students' },
                 { path: '/admin/instructors', icon: FiUserCheck, label: 'Manage Instructors' },
+                { path: '/admin/mentorship', icon: FiVideo, label: '1-to-1 Mentorship' },
                 { path: '/admin/announcements', icon: FiBell, label: 'Announcements' },
                 { path: '/admin/team', icon: FiInfo, label: 'Manage Team' },
                 { path: '/admin/support', icon: FiHelpCircle, label: 'Support' },
@@ -55,6 +57,7 @@ const Layout = ({ children }) => {
                 { path: '/instructor', icon: FiHome, label: 'Dashboard' },
                 { path: '/instructor/courses', icon: FiBook, label: 'My Courses' },
                 { path: '/instructor/quizzes', icon: FiBook, label: 'My Quizzes' },
+                { path: '/instructor/mentorship', icon: FiVideo, label: '1-to-1 Mentorship' },
                 { path: '/instructor/announcements', icon: FiBell, label: 'Announcements' },
                 { path: '/instructor/support', icon: FiHelpCircle, label: 'Support' },
             ]
@@ -62,7 +65,8 @@ const Layout = ({ children }) => {
         if (role === 'student') {
             return [
                 { path: '/student', icon: FiHome, label: 'Dashboard' },
-                { path: '/student/courses', icon: FiBook, label: 'My Courses' },
+                { path: '/student/courses', icon: FiBook, label: 'Browse Courses' },
+                { path: '/student/mentorship', icon: FiVideo, label: '1-to-1 Mentorship' },
                 { path: '/student/quizzes', icon: FiBook, label: 'My Quizzes' },
                 { path: '/student/certificates', icon: FiAward, label: 'Certificates' },
                 { path: '/student/profile', icon: FiUser, label: 'My Profile' },

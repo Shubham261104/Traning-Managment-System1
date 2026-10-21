@@ -1,0 +1,1002 @@
+/* ==========================================================================
+   STUDENT PROGRESS DASHBOARD - MODERN LMS ANALYTICS STYLES
+   ========================================================================== */
+
+.lms-progress-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  font-family: 'Montserrat', 'Inter', system-ui, -apple-system, sans-serif;
+  color: #1e293b;
+  background-color: transparent;
+  animation: lmsFadeIn 0.3s ease-out;
+}
+
+@keyframes lmsFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.lms-progress-dashboard *,
+.lms-progress-dashboard *::before,
+.lms-progress-dashboard *::after {
+  box-sizing: border-box;
+}
+
+/* Common Panel Card */
+.lms-panel {
+  background-color: #ffffff;
+  border-radius: 1.15rem;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lms-panel:hover {
+  box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.06), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+}
+
+/* Panel Header Bar */
+.panel-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.panel-title h2 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.count-pill {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #4f46e5;
+  background: #e0e7ff;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+}
+
+/* ==========================================================================
+   1. PAGE HEADER
+   ========================================================================== */
+
+.lms-header-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.lms-page-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.02em;
+}
+
+.lms-page-sub {
+  font-size: 0.92rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   2. TOP 5 STAT CARDS GRID
+   ========================================================================== */
+
+.lms-kpi-5-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.15rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.kpi-stat-card {
+  background-color: #ffffff;
+  border-radius: 1.15rem;
+  border: 1px solid #f1f5f9;
+  padding: 1.25rem;
+  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 0;
+}
+
+.kpi-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.07);
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-val {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.stat-sub {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-bar-track {
+  width: 100%;
+  height: 6px;
+  background-color: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 0.35rem;
+}
+
+.stat-bar-track.lg {
+  height: 8px;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stat-bar-fill.purple { background: linear-gradient(90deg, #7048ff, #5a32eb); }
+.stat-bar-fill.blue { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+.stat-bar-fill.green { background: linear-gradient(90deg, #10b981, #059669); }
+.stat-bar-fill.orange { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.stat-bar-fill.gold { background: linear-gradient(90deg, #eab308, #ca8a04); }
+
+.stat-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon-circle.purple { background: #f3e8ff; color: #7048ff; }
+.stat-icon-circle.blue { background: #eff6ff; color: #3b82f6; }
+.stat-icon-circle.green { background: #ecfdf5; color: #10b981; }
+.stat-icon-circle.gold { background: #fef9c3; color: #ca8a04; }
+.stat-icon-circle.orange { background: #fffbeb; color: #f59e0b; }
+
+/* ==========================================================================
+   3. OVERALL OVERVIEW PANEL
+   ========================================================================== */
+
+.overview-metrics-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.gauge-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.ring-gauge-wrapper {
+  width: 140px;
+  height: 140px;
+}
+
+.circular-chart-large {
+  width: 100%;
+  height: 100%;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #f1f5f9;
+  stroke-width: 3.5;
+}
+
+.circle-fill {
+  fill: none;
+  stroke: #7048ff;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  transition: stroke-dasharray 1s ease;
+}
+
+.circle-num {
+  fill: #0f172a;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 900;
+  text-anchor: middle;
+}
+
+.gauge-sub-lbl {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #64748b;
+  margin-top: 0.65rem;
+}
+
+.metrics-list-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.metric-row-box {
+  background-color: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 0.85rem;
+  padding: 0.85rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.row-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.row-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+.row-icon.blue { background: #eff6ff; color: #3b82f6; }
+.row-icon.orange { background: #fffbeb; color: #f59e0b; }
+.row-icon.purple { background: #f3e8ff; color: #7048ff; }
+.row-icon.green { background: #ecfdf5; color: #10b981; }
+.row-icon.teal { background: #ccfbf1; color: #0d9488; }
+
+.row-left h4 {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.row-left p {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.row-pct {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #7048ff;
+  flex-shrink: 0;
+}
+
+.row-pct.green { color: #10b981; }
+.row-pct.teal { color: #0d9488; }
+
+/* ==========================================================================
+   4. TWO-COLUMN ANALYTICS GRID (Charts & Comparison)
+   ========================================================================== */
+
+.lms-analytics-2col {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chart-body-wrapper {
+  width: 100%;
+  min-width: 0;
+}
+
+.chart-svg-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-svg-container svg {
+  width: 100%;
+  height: 180px;
+  overflow: visible;
+}
+
+.chart-tooltip-badge {
+  position: absolute;
+  transform: translate(-50%, -120%);
+  background: #0f172a;
+  color: #ffffff;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.chart-x-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-top: 0.5rem;
+  padding: 0 0.5rem;
+}
+
+/* Comparison List */
+.comparison-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.comp-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.comp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.comp-title {
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80%;
+}
+
+.comp-val {
+  font-weight: 900;
+  color: #7048ff;
+}
+
+.comp-track {
+  width: 100%;
+  height: 8px;
+  background-color: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.comp-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.comp-fill.purple { background: linear-gradient(90deg, #7048ff, #5a32eb); }
+.comp-fill.green { background: linear-gradient(90deg, #10b981, #059669); }
+
+/* ==========================================================================
+   5. DYNAMIC COURSE CARDS SECTION
+   ========================================================================== */
+
+.courses-list-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.course-progress-card {
+  background-color: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: 1.15rem;
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.15rem;
+  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+  min-width: 0;
+}
+
+.course-progress-card:hover {
+  box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.06);
+  border-color: #cbd5e1;
+}
+
+.c-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.c-avatar-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 0.85rem;
+  background: linear-gradient(135deg, #7048ff, #4c1d95);
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.c-meta-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.c-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.25rem 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.c-inst {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0 0 0.4rem 0;
+}
+
+.c-type-pills {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.type-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #4f46e5;
+  background: #e0e7ff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.4rem;
+  text-transform: uppercase;
+}
+
+.diff-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.4rem;
+}
+
+.status-pill-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.status-pill-badge.completed { background: #d1fae5; color: #047857; }
+.status-pill-badge.in-progress { background: #eff6ff; color: #1d4ed8; }
+.status-pill-badge.not-started { background: #f1f5f9; color: #64748b; }
+
+.c-progress-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.c-prog-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+
+.c-prog-labels span { color: #64748b; font-weight: 600; }
+.c-prog-labels strong { color: #7048ff; font-weight: 800; }
+
+.c-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  background-color: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 0.85rem;
+  padding: 0.75rem;
+}
+
+.c-metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.c-metric-item small {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.c-metric-item strong {
+  font-size: 0.82rem;
+  color: #1e293b;
+  font-weight: 800;
+}
+
+.c-card-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.btn-c-action {
+  flex: 1;
+  min-width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.65rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-c-action.primary {
+  background: linear-gradient(135deg, #7048ff, #5a32eb);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(112, 72, 255, 0.2);
+}
+
+.btn-c-action.primary:hover {
+  background: linear-gradient(135deg, #5a32eb, #4c1d95);
+  transform: translateY(-1px);
+}
+
+.btn-c-action.secondary {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.btn-c-action.secondary:hover {
+  background: #e2e8f0;
+}
+
+.btn-c-action.cert {
+  background: #f0fdf4;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.btn-c-action.cert:hover {
+  background: #dcfce7;
+}
+
+/* ==========================================================================
+   6. RECENT ACTIVITY & LEARNING STREAK
+   ========================================================================== */
+
+.activity-timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.act-bullet-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.act-bullet-icon.green { background: #ecfdf5; color: #10b981; }
+
+.act-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.act-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.act-meta {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.act-time-stamp {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* Streak Card Body */
+.streak-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.streak-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 0.85rem;
+  padding: 0.85rem;
+}
+
+.streak-stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.streak-stat-box small {
+  font-size: 0.68rem;
+  color: #b45309;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.streak-stat-box strong {
+  font-size: 0.95rem;
+  color: #92400e;
+  font-weight: 900;
+}
+
+.streak-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.streak-day-cell {
+  background-color: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 0.65rem;
+  padding: 0.5rem 0.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.streak-day-cell.active {
+  background-color: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.day-name {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #64748b;
+}
+
+.streak-day-cell.active .day-name {
+  color: #047857;
+}
+
+.day-dot {
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #94a3b8;
+}
+
+.streak-day-cell.active .day-dot {
+  color: #10b981;
+}
+
+/* ==========================================================================
+   7. SMART INSIGHTS & GOALS
+   ========================================================================== */
+
+.insights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.insight-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.85rem;
+  border: 1px solid;
+}
+
+.insight-card.green { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+.insight-card.blue { background: #eff6ff; border-color: #bfdbfe; color: #1e40af; }
+.insight-card.purple { background: #f5f3ff; border-color: #ddd6fe; color: #5b21b6; }
+.insight-card.teal { background: #f0fdfa; border-color: #99f6e4; color: #115e59; }
+
+.insight-card .ic {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.insight-card h4 {
+  font-size: 0.85rem;
+  font-weight: 800;
+  margin: 0 0 0.15rem 0;
+}
+
+.insight-card p {
+  font-size: 0.78rem;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.goals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.goal-item-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.goal-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+}
+
+.goal-head span { font-weight: 700; color: #334155; }
+.goal-head strong { font-weight: 900; color: #7048ff; }
+
+/* ==========================================================================
+   8. CERTIFICATE ELIGIBILITY SECTION
+   ========================================================================== */
+
+.cert-eligibility-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.cert-eligibility-card {
+  background-color: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: 1.15rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cert-eligibility-card.eligible {
+  border-color: #a7f3d0;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.08);
+}
+
+.cert-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+.cert-card-head h3 {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.cert-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.cert-badge.unlocked { background: #d1fae5; color: #047857; }
+.cert-badge.pending { background: #f1f5f9; color: #64748b; }
+
+.cert-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.check-item.done { color: #047857; }
+.check-item .ic-check { color: #10b981; }
+.check-item .ic-lock { color: #94a3b8; }
+
+.btn-view-cert-modal {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-view-cert-modal:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
+}
+
+.cert-locked-msg {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ==========================================================================
+   9. RESPONSIVE BREAKPOINTS (Fit on 1920px, 1440px, 1366px, 1280px, 1024px, Mobile)
+   ========================================================================== */
+
+@media (max-width: 1366px) {
+  .lms-kpi-5-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1100px) {
+  .lms-kpi-5-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .overview-metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .lms-analytics-2col {
+    grid-template-columns: 1fr;
+  }
+
+  .courses-list-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cert-eligibility-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .lms-kpi-5-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics-list-column {
+    grid-template-columns: 1fr;
+  }
+
+  .c-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .c-card-actions {
+    flex-direction: column;
+  }
+
+  .btn-c-action {
+    width: 100%;
+  }
+
+  .lms-panel {
+    padding: 1rem;
+  }
+}

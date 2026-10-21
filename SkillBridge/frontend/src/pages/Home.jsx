@@ -10,6 +10,17 @@ const Home = () => {
     const [loadingTeam, setLoadingTeam] = useState(true)
 
     useEffect(() => {
+        const shubhamFallback = {
+            memberId: 'shubham-kumar',
+            name: 'Shubham Kumar',
+            role: 'Founder & Lead Architect',
+            description: 'Passionate developer with expertise in MERN stack, cloud architecture, and system design. Architected the SkillBridge platform.',
+            about: 'A dedicated Full Stack Developer with deep knowledge of MERN stack. Shubham architected the entire backend system & frontend experience of SkillBridge, ensuring high scalability, modern UX, and robust security.',
+            skills: ['MERN Stack', 'Node.js', 'Express', 'MongoDB', 'React.js', 'System Architecture', 'Cloud Deployment'],
+            linkedin: 'https://www.linkedin.com/in/shubham260606/',
+            github: 'https://github.com/Shubham261104'
+        }
+
         const fetchMembers = async () => {
             try {
                 const res = await axios.get('/api/team')
@@ -20,58 +31,19 @@ const Home = () => {
                     try {
                         await axios.post('/api/team/seed')
                         const seedRes = await axios.get('/api/team')
-                        console.log('Seeded team data:', seedRes.data)
-                        setMembers(seedRes.data)
+                        const shubham = seedRes.data.filter(m => m.name.toLowerCase().includes('shubham') || m.memberId === 'shubham-kumar')
+                        setMembers(shubham.length > 0 ? shubham : [shubhamFallback])
                     } catch (seedError) {
                         console.error('Seed error:', seedError)
-                        // Use fallback data if seeding fails
-                        setMembers([
-                            {
-                                memberId: 'shubham-kumar',
-                                name: 'Shubham Kumar',
-                                role: 'Full Stack Developer',
-                                description: 'Passionate developer with expertise in MERN stack and cloud architecture.',
-                            },
-                            {
-                                memberId: 'amrit-raj',
-                                name: 'Amrit Raj',
-                                role: 'Frontend Architect',
-                                description: 'Creative UI/UX specialist focused on crafting intuitive user experiences.',
-                            },
-                            {
-                                memberId: 'harsh-kumar',
-                                name: 'Harsh Kumar',
-                                role: 'Database Engineer',
-                                description: 'Expert in database optimization and full-stack integration.',
-                            }
-                        ])
+                        setMembers([shubhamFallback])
                     }
                 } else {
-                    setMembers(res.data)
+                    const shubham = res.data.filter(m => m.name.toLowerCase().includes('shubham') || m.memberId === 'shubham-kumar')
+                    setMembers(shubham.length > 0 ? shubham : [shubhamFallback])
                 }
             } catch (error) {
                 console.error('Error fetching team:', error)
-                // Use fallback data if API fails
-                setMembers([
-                    {
-                        memberId: 'shubham-kumar',
-                        name: 'Shubham Kumar',
-                        role: 'Full Stack Developer',
-                        description: 'Passionate developer with expertise in MERN stack and cloud architecture.',
-                    },
-                    {
-                        memberId: 'amrit-raj',
-                        name: 'Amrit Raj',
-                        role: 'Frontend Architect',
-                        description: 'Creative UI/UX specialist focused on crafting intuitive user experiences.',
-                    },
-                    {
-                        memberId: 'harsh-kumar',
-                        name: 'Harsh Kumar',
-                        role: 'Database Engineer',
-                        description: 'Expert in database optimization and full-stack integration.',
-                    }
-                ])
+                setMembers([shubhamFallback])
             } finally {
                 setLoadingTeam(false)
             }
@@ -223,57 +195,100 @@ const Home = () => {
                         </div>
                     </div>
 
-                    {/* Team Section */}
+                    {/* Visionary Section */}
                     <div className="team-subsection">
                         <div className="section-header" style={{ marginTop: '5rem' }}>
-                            <span className="section-badge">Our Team</span>
-                            <h2 className="section-title">Meet the Visionaries</h2>
+                            <span className="section-badge">Project Visionary</span>
+                            <h2 className="section-title">Meet the Visionary</h2>
                             <p className="section-description">
-                                The talented team behind SkillBridge who are dedicated to revolutionizing education.
+                                “Turning ideas into powerful digital learning experiences.”
                             </p>
                         </div>
 
-                        {loadingTeam ? (
-                            <div className="team-loading">
-                                <div className="spinner"></div>
-                                <p>Loading team members...</p>
+                        {/* 3 Highlights Cards */}
+                        <div className="visionary-highlights-grid">
+                            <div className="v-highlight-card">
+                                <div className="v-highlight-icon">💡</div>
+                                <h3>Vision</h3>
+                                <p>To create a unified platform that makes training management simple, smart, and accessible.</p>
                             </div>
-                        ) : (
-                            <div className="team-grid">
-                                {members.slice(0, 4).map((member, idx) => (
-                                    <div key={member.memberId || idx} className="team-card">
-                                        <div className="team-card-banner"></div>
-                                        <div className="team-card-content">
-                                            <div className="team-avatar">
-                                                {member.avatar ? (
-                                                    <img src={member.avatar} alt={member.name} />
-                                                ) : (
-                                                    <div className="avatar-placeholder">
-                                                        {member.name.charAt(0)}
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <h3 className="team-member-name">{member.name}</h3>
-                                            <div className="team-member-role">{member.role}</div>
-                                            <p className="team-member-bio">
-                                                {member.description || member.about || 'Passionate about transforming education through technology.'}
-                                            </p>
-                                            <Link to={`/about/${member.memberId}`} className="btn-view-profile">
-                                                View Profile <FiArrowRight />
-                                            </Link>
+                            <div className="v-highlight-card">
+                                <div className="v-highlight-icon">⚡</div>
+                                <h3>Innovation</h3>
+                                <p>Combining modern web technologies with analytics, collaboration, automation, and AI-powered learning tools.</p>
+                            </div>
+                            <div className="v-highlight-card">
+                                <div className="v-highlight-icon">🎯</div>
+                                <h3>Mission</h3>
+                                <p>Empowering students, instructors, and administrators with technology that improves the complete learning journey.</p>
+                            </div>
+                        </div>
+
+                        {/* Profile Showcase Card (Without Photo) */}
+                        <div className="visionary-showcase-container">
+                            <div className="visionary-card-sleek">
+                                <div className="visionary-header-row">
+                                    <div className="visionary-title-wrap">
+                                        <div className="visionary-icon-badge">👨‍💻</div>
+                                        <div>
+                                            <h3 className="visionary-name-clean">Shubham Kumar</h3>
+                                            <span className="visionary-role-tag">Project Lead & Full-Stack Developer</span>
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        )}
+                                    <div className="visionary-socials">
+                                        <a href="https://github.com/Shubham261104" target="_blank" rel="noopener noreferrer" className="social-icon-btn" title="GitHub">
+                                            <FiGithub size={18} />
+                                        </a>
+                                        <a href="https://www.linkedin.com/in/shubham260606/" target="_blank" rel="noopener noreferrer" className="social-icon-btn" title="LinkedIn">
+                                            <FiLinkedin size={18} />
+                                        </a>
+                                        <a href="mailto:support@skillbridge.com" className="social-icon-btn" title="Email">
+                                            <FiMail size={18} />
+                                        </a>
+                                    </div>
+                                </div>
 
-                        {!loadingTeam && members.length > 4 && (
-                            <div className="team-view-all">
-                                <Link to="/about" className="btn-view-all">
-                                    View All Team Members <FiArrowRight />
-                                </Link>
+                                <div className="visionary-quote-box">
+                                    “Building smarter learning experiences through technology, innovation, and real-time collaboration.”
+                                </div>
+
+                                <div className="visionary-about-block">
+                                    <h4 className="block-label">About</h4>
+                                    <p className="about-text">
+                                        Shubham Kumar is a passionate Full-Stack Developer focused on building scalable and user-friendly web applications. He envisioned the Training Center Management System to bring students, instructors, and administrators together on a single intelligent platform.
+                                    </p>
+                                </div>
+
+                                <div className="visionary-expertise-block">
+                                    <h4 className="block-label">Expertise</h4>
+                                    <div className="expertise-chips-grid">
+                                        {[
+                                            'Full-Stack Web Development',
+                                            'React.js & JavaScript',
+                                            'Node.js & Express.js',
+                                            'MongoDB',
+                                            'REST API Development',
+                                            'Authentication & Role-Based Access',
+                                            'Dashboard & Analytics',
+                                            'Real-Time Features'
+                                        ].map((item, idx) => (
+                                            <span key={idx} className="expertise-chip">
+                                                <span className="chip-bullet"></span> {item}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="visionary-footer-row">
+                                    <div className="focus-summary">
+                                        <strong>Focus:</strong> Full-Stack Development • System Architecture • UI/UX • Real-Time Applications
+                                    </div>
+                                    <Link to="/about/shubham-kumar" className="btn-visionary-primary">
+                                        Explore Profile <FiArrowRight />
+                                    </Link>
+                                </div>
                             </div>
-                        )}
+                        </div>
                     </div>
                 </div>
             </section>

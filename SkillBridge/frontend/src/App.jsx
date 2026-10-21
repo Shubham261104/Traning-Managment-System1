@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 import PrivateRoute from './components/PrivateRoute'
@@ -12,18 +12,11 @@ import AdminStudents from './pages/admin/AdminStudents'
 import AdminInstructors from './pages/admin/AdminInstructors'
 import AdminAnnouncements from './pages/admin/AdminAnnouncements'
 import AdminTeam from './pages/admin/AdminTeam'
+import AdminMentorship from './pages/admin/AdminMentorship'
 import InstructorDashboard from './pages/instructor/InstructorDashboard'
-import InstructorCourses from './pages/instructor/InstructorCourses'
-import InstructorQuizzes from './pages/instructor/InstructorQuizzes'
-import InstructorQuizAttempts from './pages/instructor/InstructorQuizAttempts'
-import InstructorAnnouncements from './pages/instructor/InstructorAnnouncements'
-import InstructorProfile from './pages/instructor/InstructorProfile'
+import InstructorMentorship from './pages/instructor/InstructorMentorship'
 import StudentDashboard from './pages/student/StudentDashboard'
-import StudentCourses from './pages/student/StudentCourses'
-import StudentQuizzes from './pages/student/StudentQuizzes'
-import StudentCertificates from './pages/student/StudentCertificates'
-import StudentCourseMaterials from './pages/student/StudentCourseMaterials'
-import StudentProfile from './pages/student/StudentProfile'
+import StudentMentorship from './pages/student/StudentMentorship'
 import QuizTake from './pages/student/QuizTake'
 import HelpSupport from './pages/HelpSupport'
 import AboutUs from './pages/public/AboutUs'
@@ -37,7 +30,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>
-          <Router>
+          <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -53,6 +46,7 @@ function App() {
                 <Route path="courses" element={<AdminCourses />} />
                 <Route path="students" element={<AdminStudents />} />
                 <Route path="instructors" element={<AdminInstructors />} />
+                <Route path="mentorship" element={<AdminMentorship />} />
                 <Route path="announcements" element={<AdminAnnouncements />} />
                 <Route path="team" element={<AdminTeam />} />
                 <Route path="support" element={<HelpSupport />} />
@@ -60,23 +54,15 @@ function App() {
 
               <Route path="/instructor" element={<PrivateRoute allowedRoles={['instructor']} />}>
                 <Route index element={<InstructorDashboard />} />
-                <Route path="courses" element={<InstructorCourses />} />
-                <Route path="quizzes" element={<InstructorQuizzes />} />
-                <Route path="quizzes/:quizId/attempts" element={<InstructorQuizAttempts />} />
-                <Route path="announcements" element={<InstructorAnnouncements />} />
-                <Route path="profile" element={<InstructorProfile />} />
-                <Route path="support" element={<HelpSupport />} />
+                <Route path="mentorship" element={<InstructorMentorship />} />
+                <Route path="*" element={<InstructorDashboard />} />
               </Route>
 
               <Route path="/student" element={<PrivateRoute allowedRoles={['student']} />}>
                 <Route index element={<StudentDashboard />} />
-                <Route path="courses" element={<StudentCourses />} />
-                <Route path="courses/:courseId/materials" element={<StudentCourseMaterials />} />
-                <Route path="quizzes" element={<StudentQuizzes />} />
-                <Route path="certificates" element={<StudentCertificates />} />
+                <Route path="mentorship" element={<StudentMentorship />} />
                 <Route path="quiz/:quizId" element={<QuizTake />} />
-                <Route path="profile" element={<StudentProfile />} />
-                <Route path="support" element={<HelpSupport />} />
+                <Route path="*" element={<StudentDashboard />} />
               </Route>
             </Routes>
           </Router>
@@ -87,4 +73,3 @@ function App() {
 }
 
 export default App
-

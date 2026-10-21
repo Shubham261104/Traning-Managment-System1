@@ -9,18 +9,29 @@ const AboutUs = () => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        const shubhamFallback = {
+            memberId: 'shubham-kumar',
+            name: 'Shubham Kumar',
+            role: 'Founder & Lead Architect',
+            description: 'Passionate full-stack developer with expertise in MERN stack, cloud architecture, and system design.',
+            about: 'A dedicated Full Stack Developer with deep knowledge of MERN stack. Shubham architected the entire backend system & frontend experience of SkillBridge.'
+        }
+
         const fetchMembers = async () => {
             try {
                 const res = await axios.get('/api/team')
-                if (res.data.length === 0) {
+                if (!res.data || res.data.length === 0) {
                     await axios.post('/api/team/seed')
                     const seedRes = await axios.get('/api/team')
-                    setMembers(seedRes.data)
+                    const shubham = seedRes.data.filter(m => m.name.toLowerCase().includes('shubham') || m.memberId === 'shubham-kumar')
+                    setMembers(shubham.length > 0 ? shubham : [shubhamFallback])
                 } else {
-                    setMembers(res.data)
+                    const shubham = res.data.filter(m => m.name.toLowerCase().includes('shubham') || m.memberId === 'shubham-kumar')
+                    setMembers(shubham.length > 0 ? shubham : [shubhamFallback])
                 }
             } catch (error) {
                 console.error('Error fetching team:', error)
+                setMembers([shubhamFallback])
             } finally {
                 setLoading(false)
             }

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import Layout from '../../components/Layout'
 import axios from 'axios'
-import { FiUsers, FiCalendar, FiFile, FiVideo, FiLink, FiPlus, FiTrash2, FiClock, FiSettings, FiArrowRight, FiBookOpen } from 'react-icons/fi'
+import { FiUsers, FiCalendar, FiFile, FiVideo, FiLink, FiPlus, FiTrash2, FiClock, FiSettings, FiArrowRight, FiBookOpen, FiCheckSquare, FiAward } from 'react-icons/fi'
 import { Link, useSearchParams } from 'react-router-dom'
+import CourseManageView from './CourseManageView'
 import '../admin/AdminPremium.css'
 
 const InstructorCourses = () => {
@@ -158,166 +159,69 @@ const InstructorCourses = () => {
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-500"></div>
           </div>
+        ) : selectedCourse ? (
+          <CourseManageView courseId={selectedCourse} onBack={() => setSelectedCourse(null)} />
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {courses.map((course, idx) => (
-                  <div
-                    key={course._id}
-                    className={`admin-glass-card group hover:border-indigo-500/30 transition-all cursor-pointer ${selectedCourse === course._id ? 'border-indigo-500 ring-2 ring-indigo-500/20 shadow-indigo-500/20' : ''}`}
-                    style={{ animationDelay: `${idx * 0.1}s` }}
-                    onClick={() => fetchStudents(course._id)}
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform">
-                        <FiBookOpen size={24} className="text-indigo-400" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {courses.map((course, idx) => (
+              <div
+                key={course._id}
+                className="admin-glass-card group hover:border-indigo-500/50 transition-all cursor-pointer flex flex-col justify-between overflow-hidden relative"
+                style={{ animationDelay: `${idx * 0.1}s` }}
+                onClick={() => setSelectedCourse(course._id)}
+              >
+                <div>
+                  {/* Course Thumbnail */}
+                  <div className="w-full h-44 rounded-2xl overflow-hidden mb-5 relative bg-slate-900 border border-white/10 group-hover:scale-[1.02] transition-transform">
+                    {course.thumbnail ? (
+                      <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 flex items-center justify-center p-6 text-center">
+                        <FiBookOpen size={48} className="text-indigo-400 opacity-60 mb-2" />
                       </div>
-                      <span className="px-2 py-1 bg-white/5 rounded-lg text-[10px] font-black text-[#64748b] uppercase tracking-widest border border-white/5">
-                        Course ID: {course._id.slice(-6).toUpperCase()}
+                    )}
+                    
+                    {/* Status & Difficulty Badges overlay */}
+                    <div className="absolute top-3 left-3 flex flex-wrap gap-2">
+                      <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md rounded-lg text-[10px] font-black text-emerald-400 uppercase tracking-widest border border-emerald-500/30">
+                        {course.status || 'Active'}
+                      </span>
+                      <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md rounded-lg text-[10px] font-black text-indigo-300 uppercase tracking-widest border border-indigo-500/30">
+                        {course.difficulty || 'Intermediate'}
                       </span>
                     </div>
-
-                    <h3 className="text-xl font-bold text-white mb-2 uppercase tracking-tight group-hover:text-indigo-400 transition-colors line-clamp-1">{course.title}</h3>
-                    <p className="text-[#94a3b8] text-sm mb-6 line-clamp-2 leading-relaxed">{course.description}</p>
-
-                    <div className="space-y-3 mb-6 bg-white/5 p-4 rounded-2xl border border-white/5">
-                      <div className="flex items-center text-[10px] font-black text-[#64748b] uppercase tracking-widest">
-                        <FiUsers size={14} className="mr-2 text-indigo-500" />
-                        {course.enrolledCount} active students
-                      </div>
-                      <div className="flex items-center text-[10px] font-black text-[#64748b] uppercase tracking-widest">
-                        <FiCalendar size={14} className="mr-2 text-purple-500" />
-                        {new Date(course.startDate).toLocaleDateString()} - {new Date(course.endDate).toLocaleDateString()}
-                      </div>
-                    </div>
-
-                    <button
-                      className={`w-full py-3 rounded-xl font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 ${selectedCourse === course._id
-                        ? 'bg-white text-[#0f172a]'
-                        : 'bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-white'
-                        }`}
-                    >
-                      {selectedCourse === course._id ? 'Managing' : 'Manage Course'}
-                      <FiArrowRight />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="lg:col-span-1">
-              <div className="space-y-6 sticky top-6">
-                <div className="admin-glass-card">
-                  <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                    <div className="flex items-center gap-3">
-                      <FiVideo className="text-indigo-400" />
-                      <h2 className="text-xl font-bold text-white uppercase tracking-tight">Study Materials</h2>
-                    </div>
-                    {selectedCourse && (
-                      <button
-                        onClick={() => setShowMaterialModal(true)}
-                        className="w-10 h-10 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition-all flex items-center justify-center shadow-lg shadow-indigo-500/20"
-                      >
-                        <FiPlus size={20} />
-                      </button>
-                    )}
                   </div>
 
-                  {selectedCourse ? (
-                    <div className="space-y-3 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
-                      {materials.length === 0 ? (
-                        <div className="text-center py-10 opacity-50 bg-white/5 rounded-2xl border border-dashed border-white/10">
-                          <FiFile size={32} className="mx-auto mb-2 text-[#475569]" />
-                          <p className="text-[#94a3b8] font-bold uppercase tracking-widest text-[10px]">No materials added</p>
-                        </div>
-                      ) : (
-                        materials.map((material, index) => (
-                          <div key={material._id || index} className="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 border border-white/5 rounded-2xl transition-all group/mat animate-dashCardFadeIn" style={{ animationDelay: `${index * 0.05}s` }}>
-                            <div className="flex items-center space-x-4 flex-1 min-w-0">
-                              <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-400 group-hover/mat:bg-indigo-500 group-hover/mat:text-white transition-all">
-                                {getMaterialIcon(material.type)}
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm font-bold text-white truncate uppercase tracking-tight">{material.title}</p>
-                                <div className="flex items-center gap-2 mt-1">
-                                  <span className="text-[10px] font-black text-[#64748b] uppercase tracking-widest">{material.type}</span>
-                                  {material.fileSize && (
-                                    <span className="text-[10px] font-black text-[#64748b] uppercase tracking-widest">• {(material.fileSize / 1024 / 1024).toFixed(2)} MB</span>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            <button
-                              onClick={() => handleDeleteMaterial(material, index)}
-                              className="w-8 h-8 flex items-center justify-center text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all opacity-0 group-hover/mat:opacity-100"
-                            >
-                              <FiTrash2 size={16} />
-                            </button>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  ) : (
-                    <div className="text-center py-12 opacity-50 bg-white/5 rounded-[32px] border border-dashed border-white/10">
-                      <FiSettings size={48} className="mx-auto mb-4 text-[#475569] animate-spin-slow" />
-                      <p className="text-[#94a3b8] font-bold uppercase tracking-widest text-[10px]">Select a course to manage</p>
-                    </div>
-                  )}
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-bold text-white uppercase tracking-tight group-hover:text-indigo-400 transition-colors line-clamp-1">{course.title}</h3>
+                  </div>
+
+                  <p className="text-[#94a3b8] text-sm mb-6 line-clamp-2 leading-relaxed">{course.description}</p>
                 </div>
 
-                <div className="admin-glass-card">
-                  <div className="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
-                    <FiUsers className="text-purple-400" />
-                    <h2 className="text-xl font-bold text-white uppercase tracking-tight">Active Students</h2>
+                <div>
+                  {/* Course Stats */}
+                  <div className="grid grid-cols-2 gap-3 mb-6 bg-white/5 p-4 rounded-2xl border border-white/5">
+                    <div className="flex items-center text-[10px] font-black text-[#64748b] uppercase tracking-widest">
+                      <FiUsers size={14} className="mr-2 text-indigo-500" />
+                      {course.enrolledCount || course.studentCount || 0} Students
+                    </div>
+                    <div className="flex items-center text-[10px] font-black text-[#64748b] uppercase tracking-widest">
+                      <FiCheckSquare size={14} className="mr-2 text-emerald-500" />
+                      Active Quizzes
+                    </div>
                   </div>
 
-                  {selectedCourse ? (
-                    <div className="space-y-4 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
-                      {students.length === 0 ? (
-                        <div className="text-center py-10 opacity-50 bg-white/5 rounded-2xl">
-                          <p className="text-[#94a3b8] font-bold uppercase tracking-widest text-[10px]">No students enrolled</p>
-                        </div>
-                      ) : (
-                        students.map((enrollment, idx) => (
-                          <div key={enrollment._id} className="p-5 bg-white/5 border border-white/5 rounded-2xl animate-dashCardFadeIn" style={{ animationDelay: `${idx * 0.05}s` }}>
-                            <div className="flex items-center justify-between mb-3">
-                              <div>
-                                <p className="font-bold text-white uppercase tracking-tight">
-                                  {enrollment.student?.profile?.firstName} {enrollment.student?.profile?.lastName}
-                                </p>
-                                <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-widest mt-1">{enrollment.student?.email}</p>
-                              </div>
-                              <div className="px-2 py-1 bg-indigo-500/10 text-indigo-400 rounded-lg text-[10px] font-black uppercase tracking-widest border border-indigo-500/20">
-                                {enrollment.progress}%
-                              </div>
-                            </div>
-                            <div className="w-full bg-white/5 rounded-full h-1.5 overflow-hidden border border-white/5">
-                              <div
-                                className="bg-gradient-to-r from-indigo-500 to-purple-500 h-full rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(99,102,241,0.3)]"
-                                style={{ width: `${enrollment.progress}%` }}
-                              />
-                            </div>
-                          </div>
-                        ))
-                      )}
-
-                      <button
-                        onClick={() => setSelectedCourse(null)}
-                        className="w-full mt-4 py-3 bg-white/5 hover:bg-white/10 text-[#64748b] hover:text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all border border-white/5"
-                      >
-                        De-select Course
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="text-center py-12 opacity-50 bg-white/5 rounded-[32px] border border-dashed border-white/10">
-                      <FiUsers size={48} className="mx-auto mb-4 text-[#475569]" />
-                      <p className="text-[#94a3b8] font-bold uppercase tracking-widest text-[10px]">Waiting for selection</p>
-                    </div>
-                  )}
+                  <button
+                    onClick={() => setSelectedCourse(course._id)}
+                    className="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:scale-[1.02] shadow-lg shadow-indigo-500/20"
+                  >
+                    Manage Course
+                    <FiArrowRight />
+                  </button>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         )}
 
